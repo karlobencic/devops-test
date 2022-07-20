@@ -1,21 +1,26 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@1.5.0
+  docker: circleci/docker@2.1.2
 
 jobs:
-  build-and-test:
+  publish:
     docker:
-      - image: cimg/python:3.10.2
+      - image: cimg/base:2022.07
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
-      - run:
-          name: Run tests
-          command: pytest
+      - run: docker-compose build
+      - run: docker tag karlobencic/service1 karlobencic/service1
+      - run: docker tag karlobencic/service1 karlobencic/service2
+      - docker/check
+      - docker/push:
+          image: karlobencic/service1 
+          tag: latest
+      - docker/push:
+          image: karlobencic/service2 
+          tag: latest
 
 workflows:
-  sample:
+  build-test-publish-workflow:
     jobs:
-      - build-and-test
+      - publish
