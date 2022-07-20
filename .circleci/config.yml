@@ -14,7 +14,9 @@ jobs:
       - run: docker-compose build
       - run: docker tag karlobencic/service1 karlobencic/service1
       - run: docker tag karlobencic/service1 karlobencic/service2
-      - docker/check
+      - docker/check:
+          docker-username: DOCKERHUB_LOGIN
+          docker-password: DOCKERHUB_PASSWORD
       - docker/push:
           image: karlobencic/service1 
           tag: latest
@@ -25,4 +27,7 @@ jobs:
 workflows:
   build-test-publish-workflow:
     jobs:
-      - publish
+      - publish:
+          context:
+              - build-env-vars
+              - docker-hub-creds
