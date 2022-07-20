@@ -5,8 +5,10 @@ orbs:
 
 jobs:
   publish:
-    docker:
-      - image: cimg/base:2022.07
+    machine:
+      image: ubuntu-2004:current
+      docker_layer_caching: true
+    resource_class: medium
     steps:
       - checkout
       - run: docker-compose build
