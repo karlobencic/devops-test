@@ -4,6 +4,19 @@ orbs:
   docker: circleci/docker@2.1.2
 
 jobs:
+  test-job:
+    docker: 
+      - image: qnib/pytest
+    steps:
+      - checkout
+      - run: 
+          name: Run tests for service 1
+          command: pytest service1/tests/
+      - run: 
+          name: Run tests for service 2
+          command: pytest service2/tests/
+    parallelism: 2
+  
   publish:
     machine:
       image: ubuntu-2004:current
@@ -27,6 +40,7 @@ jobs:
 workflows:
   build-test-publish-workflow:
     jobs:
+      - test-job
       - publish:
           context:
               - docker-hub-creds
