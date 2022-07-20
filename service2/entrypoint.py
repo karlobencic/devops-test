@@ -1,7 +1,7 @@
 import requests
 import sys
 
-SERVICE1_URL = "http://service.example.com:8080"
+SERVICE1_URL = "http://service1:8080"
 
 message = requests.get(sys.stdin.readline()).text
 data = ["md5", message]
