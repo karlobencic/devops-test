@@ -12,22 +12,21 @@ jobs:
     steps:
       - checkout
       - run: docker-compose build
-      - run: docker tag karlobencic/service1 karlobencic/service1
-      - run: docker tag karlobencic/service1 karlobencic/service2
+      - run: docker tag karlobencic/service1 karlobencic/service1:$CIRCLE_BUILD_NUM
+      - run: docker tag karlobencic/service1 karlobencic/service2:$CIRCLE_BUILD_NUM
       - docker/check:
           docker-username: DOCKERHUB_LOGIN
           docker-password: DOCKERHUB_PASSWORD
       - docker/push:
           image: karlobencic/service1 
-          tag: latest
+          tag: latest,$CIRCLE_BUILD_NUM
       - docker/push:
           image: karlobencic/service2 
-          tag: latest
+          tag: latest,$CIRCLE_BUILD_NUM
 
 workflows:
   build-test-publish-workflow:
     jobs:
       - publish:
           context:
-              - build-env-vars
               - docker-hub-creds
