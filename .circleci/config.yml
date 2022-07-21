@@ -4,17 +4,29 @@ orbs:
   docker: circleci/docker@2.1.2
 
 jobs:
-  test-job:
+  unit-test-job:
     docker: 
       - image: qnib/pytest
     steps:
       - checkout
       - run: 
-          name: Run tests for service 1
-          command: pytest service1/tests/
+          name: Run unit tests for service 1
+          command: pytest service1/tests/unit/
       - run: 
-          name: Run tests for service 2
-          command: pytest service2/tests/
+          name: Run unit tests for service 2
+          command: pytest service2/tests/unit/
+    parallelism: 2
+  integration-test-job:
+    docker: 
+      - image: qnib/pytest
+    steps:
+      - checkout
+      - run: 
+          name: Run integration tests for service 1
+          command: pytest service1/tests/integration/
+      - run: 
+          name: Run integration tests for service 2
+          command: pytest service2/tests/integration/
     parallelism: 2
   
   publish:
@@ -40,7 +52,8 @@ jobs:
 workflows:
   build-test-publish-workflow:
     jobs:
-      - test-job
+      - unit-test-job
+      - integration-test-job
       - publish:
           context:
               - docker-hub-creds

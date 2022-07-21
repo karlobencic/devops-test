@@ -3,14 +3,17 @@ version: '3'
 services:
   service1:
     build: service1
-    image: karlobencic/service1
+    image: karlobencic/service1:${TAG}
     ports:
       - "8080:8080"
   service2:
     build: service2
-    image: karlobencic/service2
+    image: karlobencic/service2:${TAG}
     restart: on-failure
     ports:
       - "8081:8080"
     depends_on:
       - service1
+    environment:
+      - SERVICE1_HOST=service1
+      - SERVICE1_PORT=8080
