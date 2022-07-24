@@ -33,4 +33,4 @@ kubectl apply -f k8s
 kubectl set image deployments/service1-deployment service1=karlobencic/service1:$VERSION_SERVICE1
 kubectl set image deployments/service2-deployment service2=karlobencic/service2:$VERSION_SERVICE2
 
-echo "Services available on: $(minikube ip)"
+kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
